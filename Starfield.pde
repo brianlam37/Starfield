@@ -7,10 +7,10 @@ void setup()
 
 	for(int i=0;i<particles.length;i++){
 		
-		if(i%23==0){
+		if(i%2==0||i%3==0||i%5==0){
 			particles[i]=new OddballParticle();
 		}
-		else if(i%2==0||i%3==0||i%5==0){
+		else if(i%13==0){
 			particles[i]=new JumboParticle();
 		}else{
 			particles[i]=new NormalParticle();
@@ -82,27 +82,27 @@ class OddballParticle implements Particle//uses an interface
 		yOPos=200;
 		colO=color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
 		angO=(float)(Math.random()*2*Math.PI);
-		speO=2;
+		speO=4;
 	}
 	public void move(){
-		xOPos+=cos(angO)*speO+(int)(Math.random()*20-10);
-		yOPos+=sin(angO)*speO+(int)(Math.random()*20-10);
+		xOPos+=cos(angO)*speO;
+		yOPos+=sin(angO)*speO;
 		if(xOPos>=400||xOPos<=0||yOPos>=400||yOPos<=0){
 			xOPos=200;
 			yOPos=200;
 		}
+		angO=angO-PI/360;
 	}
 	public void show(){
-		if(xOPos>200){fishR(xOPos,yOPos);}else{
-
-
-		fishF(xOPos,yOPos);}
-		
-		
+		stroke(colO);
+		fill(colO);
+		ellipse(xOPos,yOPos,(int)(Math.random()*20)-10,(int)(Math.random()*20)-10);
 	}
+	
+	
 
 }
-class JumboParticle implements Particle//uses inheritance
+class JumboParticle extends NormalParticle//uses inheritance
 {
 	//your code here
 	float xJPos;
@@ -110,6 +110,7 @@ class JumboParticle implements Particle//uses inheritance
 	int colJ;
 	float angJ;
 	float speJ;
+	float wJ=0.0625;
 	JumboParticle(){
 		xJPos=200;
 		yJPos=200;
@@ -117,23 +118,28 @@ class JumboParticle implements Particle//uses inheritance
 		angJ=(float)(Math.random()*2*Math.PI);
 		speJ=4;
 	}
+	
 	public void move(){
-		xJPos+=cos(angJ)*speJ;
-		yJPos+=sin(angJ)*speJ;
+		xJPos+=cos(angJ)*speJ+(int)(Math.random()*10-5);
+		yJPos+=sin(angJ)*speJ+(int)(Math.random()*10-5);
+		wJ=wJ+0.0625;
 		if(xJPos>=400||xJPos<=0||yJPos>=400||yJPos<=0){
 			xJPos=200;
 			yJPos=200;
+			wJ=0.0625;
 		}
-		angJ=angJ-PI/360;
+		
 	}
 	public void show(){
-		stroke(colJ);
-		fill(colJ);
-		ellipse(xJPos,yJPos,(int)(Math.random()*20)-10,(int)(Math.random()*20)-10);
-	}
+		if(xJPos>200){fishR(xJPos,yJPos,wJ
+			);}else{
+
+
+		fishF(xJPos,yJPos,wJ);}
+
 }
 
-void fishF(float fishX, float fishY){
+void fishF(float fishX, float fishY,float w){
                   int[][] pix = 
                   {
                           {0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,3,3,3,4,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -174,7 +180,7 @@ void fishF(float fishX, float fishY){
                   color color15 =color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
                   color color16 =color(255, 255, 255);
                   color color17 =color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
-                  float w=0.25;
+
                   float h=w;
                   int a=0;
                   for(int p = 0; p < pix.length; p += 1)
@@ -289,7 +295,7 @@ void fishF(float fishX, float fishY){
                       a =0;//makes it so that every row is not always ongoing based on "a" value from "a += w"
                   }
               }
-void fishR(float fishX,float fishY){
+void fishR(float fishX,float fishY, float w){
  	        int[][] pix = 
             {
                 {0,0,0,0,0,0,0,0,0,0,0,0,4,3,3,3,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -328,7 +334,7 @@ void fishR(float fishX,float fishY){
                   color color15 =color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
                   color color16 =color(255, 255, 255);
                   color color17 =color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
-                  float w=0.25;
+
                   float h=w;
                   int a=0;
                   for(int p = 0; p < pix.length; p += 1)
@@ -442,4 +448,4 @@ void fishR(float fishX,float fishY){
                       fishY += h+1;//makes //makes pix equally distant
                       a =0;//makes it so that every row is not always ongoing based on "a" value from "a += w"
                   }
-    			}          
+    			}    }      
